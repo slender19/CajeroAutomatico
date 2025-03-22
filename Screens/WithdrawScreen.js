@@ -1,8 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { 
-  View, Text, TouchableOpacity, TextInput, Alert, 
-  StyleSheet, ScrollView 
-} from "react-native";
+import { View, Text, TouchableOpacity, TextInput, Alert, StyleSheet, ScrollView} from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { calcularBilletes } from "../Utils/calculateWithdrawalLogic";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -74,7 +71,7 @@ const RetiroScreen = () => {
       Alert.alert("Error", result.error);
     } else {
       let message = `🔹 Tipo de cuenta: ${tipoCuenta}\n`;
-      message += `🔹 Número de cuenta: ${tipoCuenta === "Nequi" ? "1" + numeroCuenta : numeroCuenta}\n\n`;
+      message += `🔹 Número de cuenta: ${tipoCuenta === "Nequi" ? "0" + numeroCuenta : numeroCuenta}\n\n`;
       message += "- Billetes dispensados:\n";
 
       for (let i = 0; i < result.denominations.length; i++) {
@@ -94,7 +91,7 @@ const RetiroScreen = () => {
 
             navigation.reset({
               index: 0,
-              routes: [{ name: "LoginScreen" }],
+              routes: [{ name: "SelectAccountScreen" }],
             });
           },
         },
@@ -162,9 +159,15 @@ const RetiroScreen = () => {
         onChangeText={setCodigoIngresado}
       />
 
-      <TouchableOpacity style={styles.withdrawButton} onPress={handleRetiro}>
-        <Text style={styles.buttonText}>Retirar</Text>
-      </TouchableOpacity>
+       <View style={styles.buttonContainer}>
+          <TouchableOpacity style={[styles.button, styles.cancelButton]} onPress={() => navigation.goBack()}>
+            <Text style={styles.buttonText}>Cancelar</Text>
+            </TouchableOpacity>
+      
+          <TouchableOpacity style={[styles.button, styles.acceptButton]} onPress={handleRetiro}>
+            <Text style={styles.buttonText}>Aceptar</Text>
+            </TouchableOpacity>
+            </View>
     </ScrollView>
   );
 };
@@ -227,16 +230,28 @@ const styles = StyleSheet.create({
     marginVertical: 15,
     backgroundColor: "#fff",
   },
-  withdrawButton: {
-    backgroundColor: "#6200ee",
-    padding: 15,
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "80%",
+  },
+  button: {
+    flex: 1,
+    paddingVertical: 12,
     borderRadius: 8,
-    marginTop: 20,
+    marginHorizontal: 5,
+    alignItems: "center",
+  },
+  acceptButton: {
+    backgroundColor: "#4CAF50", 
+  },
+  cancelButton: {
+    backgroundColor: "#D32F2F", 
   },
   buttonText: {
     color: "#fff",
-    fontSize: 16,
     fontWeight: "bold",
+    fontSize: 16,
   },
 });
 
